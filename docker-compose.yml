@@ -3,9 +3,9 @@ services:
   worker:
     build: .
     environment:
-      APP_ID: $APP_ID
-      API_HASH: $API_HASH
-      TG_BOT_TOKEN: $TG_BOT_TOKEN
-      TG_USER_SESSION: $TG_USER_SESSION
-      AUTH_USERS: $AUTH_USERS
-      ENV: $ENV
+      - TG_BOT_TOKEN=${TG_BOT_TOKEN}
+      - APP_ID=${APP_ID}
+      - API_HASH=${API_HASH}
+      - AUTH_USERS=${AUTH_USERS}
+      - TG_USER_SESSION=${TG_USER_SESSION}
+      - DB_URI=${DB_URI}
