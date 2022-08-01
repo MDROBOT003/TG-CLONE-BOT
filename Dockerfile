@@ -1,13 +1,6 @@
-FROM python:3.8
+FROM arata74/enc
+COPY . .
 
-WORKDIR /app
+RUN pip3 install -U -r requirements.txt
 
-COPY requirements.txt /app/
-
-RUN pip3 install -r requirements.txt
-
-COPY . /app
-
-#set a default command
-
-CMD python3 main.py
+CMD ["bash", "start.sh"]
