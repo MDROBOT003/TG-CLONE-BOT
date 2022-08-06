@@ -10,10 +10,8 @@ from presets import Presets
 from pyrogram.types import Message
 from pyrogram.enums import ParseMode
 from pyrogram.errors import FloodWait
-from plugins.cb_input import update_type_buttons
 from library.buttons import reply_markup_stop, reply_markup_finished
-from library.chat_support import calc_percentage, calc_progress, save_target_cfg, get_time
-
+from library.chat_support import calc_percentage, calc_progress, save_target_cfg, get_time, set_to_defaults
 #
 bot_start_time = time.time()
 #
@@ -23,10 +21,9 @@ async def clone_medias(bot: Bot, m: Message):
     clone_cancel_key[id] = int(m.id)
     #
     clone_start_time = time.time()
-    start_time = datetime.datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%I:%M:%S %p')
-    uptime = time.strftime("%Hh %Mm %Ss", time.gmtime(time.time() - bot_start_time))
+    start_time = datetime.datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%I:%M %p')
     #
-    file_name = caption = str()
+    file_name = caption = report = str()
     #
     delay = limit = doc = video = audio = text = voice = photo = total_copied = matching = msg_id = int()
     #
@@ -91,10 +88,7 @@ async def clone_medias(bot: Bot, m: Message):
                     await asyncio.sleep(2)
                     await msg.edit(Presets.CANCELLED_MSG, reply_markup=reply_markup_finished)
                     await bot.USER.send_message("me", report, disable_web_page_preview=True)
-                    await reset_all(id)
-                    file_types.clear()
-                    file_types.extend(Presets.FILE_TYPES)
-                    await update_type_buttons()
+                    await set_to_defaults(id)
                     return
                 else:
                     pass
@@ -132,8 +126,8 @@ async def clone_medias(bot: Bot, m: Message):
                             #
                             total_copied = doc + video + audio + voice + photo + text
                             pct = await calc_percentage(sp, ep, msg_id)
-                            time_taken = time.strftime("%Hh %Mm %Ss", time.gmtime(time.time() - clone_start_time))
-                            update_time = datetime.datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%I:%M:%S %p')
+                            time_taken = time.strftime("%Hh %Mm", time.gmtime(time.time() - clone_start_time))
+                            update_time = datetime.datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%I:%M %p')
                             try:
                                 await m.edit(
                                     Presets.MESSAGE_COUNT.format(
@@ -141,7 +135,6 @@ async def clone_medias(bot: Bot, m: Message):
                                         int(total_copied),
                                         trunc(pct) if pct <= 100 else "- ",
                                         time_taken,
-                                        uptime,
                                         start_time,
                                         update_time
                                     ),
@@ -166,9 +159,8 @@ async def clone_medias(bot: Bot, m: Message):
                                 await asyncio.sleep(e.value)
                             except Exception:
                                 await msg.edit_text(Presets.COPY_ERROR, reply_markup=reply_markup_finished)
-                                await reset_all(id)
-                                file_types.clear()
-                                file_types.extend(Presets.FILE_TYPES)
+                                await bot.USER.send_message("me", report, disable_web_page_preview=True)
+                                await set_to_defaults(id)
                                 if not int(total_copied):
                                     await m.delete()
                                 return
@@ -183,10 +175,8 @@ async def clone_medias(bot: Bot, m: Message):
                                 if not int(total_copied):
                                     await m.delete()
                                 await msg.edit(Presets.FINISHED_TEXT, reply_markup=reply_markup_finished)
-                                await reset_all(id)
-                                file_types.clear()
-                                file_types.extend(Presets.FILE_TYPES)
-                                await update_type_buttons()
+                                await bot.USER.send_message("me", report, disable_web_page_preview=True)
+                                await set_to_defaults(id)
                                 return
                             else:
                                 pass
@@ -201,7 +191,5 @@ async def clone_medias(bot: Bot, m: Message):
         await m.delete()
     await m.edit_reply_markup(None)
     await msg.edit(Presets.FINISHED_TEXT, reply_markup=reply_markup_finished)
-    file_types.clear()
-    await reset_all(id)
-    file_types.extend(Presets.FILE_TYPES)
-    await update_type_buttons()
+    await bot.USER.send_message("me", report, disable_web_page_preview=True)
+    await set_to_defaults(id)
