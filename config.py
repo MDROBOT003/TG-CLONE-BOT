@@ -24,7 +24,7 @@ class Config(object):
     TG_USER_SESSION = os.environ.get("TG_USER_SESSION", "BQCWNWIAHnnxOlduK79apkgnhb9P_FA3fNcMNOCiBOfQg3SwMIeJFvSqZXsIGoy0yYZdSSbNRvSIshpoWAtBi44N4sI34OAP63QBgReFsx-5ftKIEg_MHQ1kN9HN1U_KwsBwgpSXZeoTNqXMvZc24_0kJZpHcUc1pH4Lbuzav4G5X0dLuj17VZVdGTUv9D_XnCQh0slE_76huGDqg-XRa2H-LyhWgvFNOinO1GZRn-O4zA0OZqLV_Qnrn6-FaaH1rnKFy6uqNIWo47XHKhLXnX6KYgZDntjnWYCW49oFPLfIJg6bbNrCcXA0fUSRngh0OseAZJ1E-IUjSIiLf3vagvtVJ5U8cQAAAABphwJ4AA")
 
     # Database URI
-    DB_URI = os.environ.get("DATABASE_URL", "")
+    DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://clone:computer90@cluster0.jff6fof.mongodb.net/?retryWrites=true&w=majority")
 
 
 def LOGGER(name: str) -> logging.Logger:
