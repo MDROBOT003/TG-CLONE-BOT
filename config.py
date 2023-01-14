@@ -25,7 +25,6 @@ class Config(object):
 
     # Database URI
     DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://jaychand:jaychand90@cluster0.zplulnw.mongodb.net/test")
-")
 
 
 def LOGGER(name: str) -> logging.Logger:
